@@ -1,0 +1,53 @@
+import trenes.*
+
+describe "test de trenes" {
+
+	var formacion = new Formacion()
+	var locomotora1 = new Locomotora()
+	var locomotora2 = new Locomotora()
+	var vagon1 = new Vagon(tipoDeVagon = carga)
+	var vagon2 = new Vagon(tipoDeVagon = pasajero)
+
+	test"La cantidad de vagones livianos es 2" {
+		formacion.agregarVagon(vagon1)
+		formacion.agregarVagon(vagon2)
+		carga.cargaMaxima(1000)
+		pasajero.ancho(2)
+		pasajero.largo(3)
+		assert.equals(2, formacion.cantidadVagonesLivianos())
+	}
+
+	test "Velocidad maxima de una formacion" {
+		formacion.agregarLocomotora(new Locomotora(velocidadMaxima = 10))
+		assert.equals(10, formacion.velocidadMaxima())
+	}
+
+	test "Es eficiente" {
+		formacion.agregarLocomotora(locomotora1)
+		locomotora1.peso(100)
+		locomotora1.capacidadMaximaDeArrastre(1000)
+		assert.that(formacion.esEficiente())
+	}
+
+	test "Puede moverse" {
+		formacion.agregarLocomotora(locomotora1)
+		formacion.agregarLocomotora(locomotora2)
+		carga.cargaMaxima(100)
+		locomotora1.capacidadMaximaDeArrastre(1000)
+		carga.cargaMaxima(200)
+		locomotora2.capacidadMaximaDeArrastre(2000)
+		assert.that(formacion.puedeMoverse())
+	}
+
+	test "Le faltan 10 kg de arrastre" {
+		formacion.agregarLocomotora(locomotora1)
+		formacion.agregarLocomotora(locomotora2)
+		carga.cargaMaxima(100)
+		locomotora2.capacidadMaximaDeArrastre(255)
+		carga.cargaMaxima(200)
+		locomotora1.capacidadMaximaDeArrastre(255)
+		assert.equals(10, formacion.cuantosKilosDeArrastreLeFalta())
+	}
+
+}
+
