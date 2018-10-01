@@ -10,9 +10,10 @@ describe "test de trenes" {
 	var formacion2 = new Formacion()
 	var locomotora1 = new Locomotora()
 	var locomotora2 = new Locomotora()
-	var vagon1 = new Vagon()
-	var vagon2 = new Vagon()
-
+	var vagon1 = new Vagon(tipoDeVagon=carga)
+	var vagon2 = new Vagon(tipoDeVagon=pasajero)
+	var vagon3 = new Vagon(tipoDeVagon=pasajero)
+	
 	test"La cantidad de vagones livianos es 2" {
 		formacion1.agregarVagon(vagon1)
 		formacion1.agregarVagon(vagon2)
@@ -39,8 +40,6 @@ describe "test de trenes" {
 	test "Puede moverse" {
 		formacion2.agregarLocomotora(locomotora1)
 		formacion2.agregarLocomotora(locomotora2)
-		vagon1.tipoDeVagon(carga)
-		vagon2.tipoDeVagon(carga)
 		carga.cargaMaxima(100)
 		locomotora1.capacidadMaximaDeArrastre(1000)
 		carga.cargaMaxima(200)
@@ -48,28 +47,30 @@ describe "test de trenes" {
 		assert.that(formacion2.puedeMoverse())
 	}
 
-	test "Le faltan 210 kg de arrastre" {
+	test "Le faltan 880 kg de arrastre" {
 		formacion2.agregarLocomotora(locomotora1)
 		formacion2.agregarLocomotora(locomotora2)
-		vagon1.tipoDeVagon(carga)
-		vagon2.tipoDeVagon(pasajero)
+		formacion2.agregarVagon(vagon1)
+		formacion2.agregarVagon(vagon2)
 		carga.cargaMaxima(200)
 		pasajero.ancho(2)
 		pasajero.largo(3)
 		locomotora1.capacidadMaximaDeArrastre(800)
 		locomotora2.capacidadMaximaDeArrastre(800)
-		assert.equals(210, formacion2.cuantosKilosDeArrastreLeFalta())
+		assert.equals(880, formacion2.cuantosKilosDeArrastreLeFalta())
 	}
 
 	test "El vagon mas pesado de la formacion es" {
-		formacion1.agregarVagon(vagon1)
-		formacion1.agregarVagon(vagon2)
-		vagon1.tipoDeVagon(carga)
-		vagon2.tipoDeVagon(pasajero)
 		carga.cargaMaxima(180)
 		pasajero.ancho(2)
-		pasajero.largo(3)
-		assert.equals([ vagon2 ], formacion1.vagonMasPesadoDeUnaFormacion())
+		pasajero.largo(5)
+		deposito1.agregarFormacion(formacion1)
+		deposito1.agregarFormacion(formacion2)
+		formacion1.agregarVagon(vagon1)
+		formacion1.agregarVagon(vagon2)
+		formacion2.agregarVagon(vagon3)	
+		formacion2.agregarVagon(vagon2)	
+		assert.equals( [vagon2,vagon3], deposito1.conjuntoDeVagonesMasPesados())
 	}
 
 	test"La formacion necesita un conductor experimentado" {
@@ -78,8 +79,6 @@ describe "test de trenes" {
 		formacion1.agregarVagon(vagon2)
 		formacion1.agregarLocomotora(locomotora1)
 		formacion1.agregarLocomotora(locomotora2)
-		vagon1.tipoDeVagon(carga)
-		vagon2.tipoDeVagon(pasajero)
 		pasajero.ancho(3)
 		pasajero.largo(9)
 		carga.cargaMaxima(3200)
@@ -87,4 +86,7 @@ describe "test de trenes" {
 	}
 
 }
-
+ /* En el punto 7 se pide saber si el objeto deposito necesita un conductor experimentado
+  * para ello  el deposito delega a el objeto formacion que a su vez delega a los objetos 
+  * locomotora y vagon la comparacion para saber si esta es compleja  
+*/
