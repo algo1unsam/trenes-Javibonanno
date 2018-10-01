@@ -26,7 +26,8 @@ describe "test de trenes" {
 	}
 
 	test "Velocidad maxima de una formacion" {
-		formacion1.agregarLocomotora(new Locomotora(velocidadMaxima = 10))
+		formacion1.agregarLocomotora(locomotora1)
+		locomotora1.velocidadMaxima(10)
 		assert.equals(10, formacion1.velocidadMaxima())
 	}
 
