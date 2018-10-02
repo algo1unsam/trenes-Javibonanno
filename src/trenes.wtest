@@ -85,7 +85,16 @@ describe "test de trenes" {
 		carga.cargaMaxima(3200)
 		assert.that(deposito1.necesitoConductorExperimentado())
 	}
-
+test "La locomotora1 puede agregarse a una formacion de un deposito"{
+	deposito1.agregarFormacion(formacion1)
+	formacion1.agregarLocomotora(locomotora2)
+	locomotora2.capacidadMaximaDeArrastre(1000)
+	formacion1.agregarVagon(vagon3)
+	pasajero.ancho(2)
+	pasajero.largo(2)
+	deposito1.agregarLocomotoraSiNoPuedeMoverse(formacion1,locomotora2)
+	assert.that(formacion1.puedeMoverse())
+}
 }
  /* En el punto 7 se pide saber si el objeto deposito necesita un conductor experimentado
   * para ello  el deposito delega a el objeto formacion que a su vez delega a los objetos 
