@@ -2,6 +2,7 @@ import formaciones.*
 import vagones.*
 import locomotoras.*
 
+
 class Deposito {
 
 	var property formaciones = []

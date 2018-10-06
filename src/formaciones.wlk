@@ -1,6 +1,7 @@
 import vagones.*
 import locomotoras.*
 import depositos.*
+
 class Formacion {
 
 	var property locomotoras = []
@@ -51,8 +52,27 @@ class Formacion {
 	}
 
 	method esCompleja() {
-		return (locomotoras.size() + vagones.size()) > 20 or 
-		(self.sumatoriaDePesoMaximoDeLocomotoras() + self.sumatoriaDePesoMaximoDeVagones()) > 10000
+		return (locomotoras.size() + vagones.size()) > 20 or (self.sumatoriaDePesoMaximoDeLocomotoras() + self.sumatoriaDePesoMaximoDeVagones()) > 10000
+	}
+
+}
+
+class FormacionesLargaDistancia inherits Formacion {
+
+	method estaBienArmada() {
+		return self.esCompleja() and self.cantidadDeBanios()
+	}
+
+	method cantidadDeBanios() {
+		return vagones.sum{ unVagon => unVagon.cantidadBanios() }
+	}
+
+}
+
+class FormacionesCortaDistancia inherits Formacion {
+
+	method estaBienArmada() {
+		return self.puedeMoverse() and not self.esCompleja()
 	}
 
 }

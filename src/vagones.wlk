@@ -12,6 +12,7 @@ object pasajero {
 
 	var property ancho = 0
 	var property largo = 0
+	const property cantidadBanios = 0
 
 	method cantidadDePasajeros() {
 		if (ancho <= 2.5) {
@@ -32,6 +33,8 @@ object carga {
 	method pesoMaximo() {
 		return cargaMaxima + 160
 	}
+
+	method cantidadBanios() = 0
 
 }
 
