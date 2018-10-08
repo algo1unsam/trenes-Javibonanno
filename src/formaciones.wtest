@@ -1,0 +1,157 @@
+import depositos.*
+import formaciones.*
+import vagones.*
+import locomotoras.*
+
+describe "test de formaciones" {
+
+	var deposito1 = new Deposito()
+	var formacion1 = new FormacionLargaDistancia()
+	var formacion2 = new FormacionCortaDistancia()
+	var locomotora1 = new Locomotora()
+	var locomotora2 = new Locomotora()
+	var vagon1 = new VagonCarga()
+	var vagon2 = new VagonPasajero()
+	var vagon3 = new VagonPasajero()
+
+	test"La cantidad de vagones livianos es 2" {
+		formacion2.agregarVagon(vagon1)
+		formacion2.agregarVagon(vagon2)
+		vagon1.cargaMaxima(1000)
+		vagon2.ancho(2)
+		vagon2.largo(3)
+		assert.equals(2, formacion2.cantidadVagonesLivianos())
+	}
+
+	test "El vagon mas pesado de la formacion1 es" {
+		deposito1.agregarFormacion(formacion1)
+		deposito1.agregarFormacion(formacion2)
+		formacion1.agregarVagon(vagon1)
+		formacion1.agregarVagon(vagon2)
+		formacion2.agregarVagon(vagon3)
+		formacion2.agregarVagon(vagon2)
+		vagon1.cargaMaxima(180)
+		vagon2.ancho(2)
+		vagon2.largo(5)
+		vagon3.ancho(2)
+		vagon3.largo(5)
+		assert.equals([ vagon2, vagon3 ], deposito1.conjuntoDeVagonesMasPesados())
+	}
+
+	test "Velocidad maxima de una formacion" {
+		formacion1.agregarLocomotora(locomotora1)
+		locomotora1.velocidadMaxima(10)
+		assert.equals(10, formacion1.velocidadMaximaLocomotora())
+	}
+
+	test "Es eficiente" {
+		formacion1.agregarLocomotora(locomotora1)
+		locomotora1.peso(100)
+		locomotora1.capacidadMaximaDeArrastre(1000)
+		assert.that(formacion1.esEficiente())
+	}
+
+	test "Puede moverse" {
+		formacion2.agregarLocomotora(locomotora1)
+		formacion2.agregarLocomotora(locomotora2)
+		vagon1.cargaMaxima(100)
+		locomotora1.capacidadMaximaDeArrastre(1000)
+		vagon1.cargaMaxima(200)
+		locomotora2.capacidadMaximaDeArrastre(1000)
+		assert.that(formacion2.puedeMoverse())
+	}
+
+	test "Le faltan 880 kg de arrastre" {
+		formacion2.agregarLocomotora(locomotora1)
+		formacion2.agregarLocomotora(locomotora2)
+		formacion2.agregarVagon(vagon1)
+		formacion2.agregarVagon(vagon2)
+		vagon1.cargaMaxima(200)
+		vagon2.ancho(2)
+		vagon2.largo(3)
+		locomotora1.capacidadMaximaDeArrastre(800)
+		locomotora2.capacidadMaximaDeArrastre(800)
+		assert.equals(880, formacion2.cuantosKilosDeArrastreLeFalta())
+	}
+
+	test"El deposito1 necesita un conductor experimentado" {
+		deposito1.agregarFormacion(formacion1)
+		formacion1.agregarVagon(vagon1)
+		formacion1.agregarVagon(vagon2)
+		formacion1.agregarLocomotora(locomotora1)
+		formacion1.agregarLocomotora(locomotora2)
+		vagon2.ancho(3)
+		vagon2.largo(9)
+		vagon1.cargaMaxima(3200)
+		assert.that(deposito1.necesitoConductorExperimentado())
+	}
+
+	test "La locomotora1 puede agregarse a una formacion de un deposito" {
+		deposito1.agregarFormacion(formacion1)
+		formacion1.agregarLocomotora(locomotora2)
+		locomotora2.capacidadMaximaDeArrastre(1000)
+		formacion1.agregarVagon(vagon3)
+		vagon3.ancho(2)
+		vagon3.largo(2)
+		deposito1.agregarLocomotoraSiNoPuedeMoverse(formacion1, locomotora2)
+		assert.that(formacion1.puedeMoverse())
+	}
+
+	test "La formacion2 esta bien armada" {
+		deposito1.agregarFormacion(formacion2)
+		formacion2.agregarLocomotora(locomotora2)
+		formacion2.agregarLocomotora(locomotora1)
+		locomotora2.capacidadMaximaDeArrastre(3500)
+		locomotora2.capacidadMaximaDeArrastre(5000)
+		formacion2.agregarVagon(vagon1)
+		formacion2.agregarVagon(vagon1)
+		vagon1.cargaMaxima(6000)
+		vagon1.cargaMaxima(2000)
+		assert.that(formacion2.estaBienArmada())
+	}
+
+	test "La formacion1 esta bien armada" {
+		deposito1.agregarFormacion(formacion1)
+		formacion1.agregarLocomotora(locomotora2)
+		formacion1.agregarLocomotora(locomotora1)
+		locomotora2.capacidadMaximaDeArrastre(3500)
+		locomotora1.capacidadMaximaDeArrastre(5000)
+		formacion1.agregarVagon(vagon3)
+		formacion1.agregarVagon(vagon2)
+		vagon2.ancho(3)
+		vagon2.largo(6)
+		vagon3.ancho(3)
+		vagon3.largo(4)
+		assert.that(formacion1.estaBienArmada())
+	}
+
+	test"la velocidad maxima de la formacion3 es" {
+		var buenosAires = new Ciudad()
+		var neuquen = new Ciudad()
+		var formacion3 = new FormacionLargaDistancia(origen = neuquen, destino = buenosAires)
+		neuquen.esGrande(false)
+		buenosAires.esGrande(true)
+		deposito1.agregarFormacion(formacion3)
+		formacion3.agregarLocomotora(locomotora2)
+		formacion3.agregarLocomotora(locomotora1)
+		locomotora1.velocidadMaxima(200)
+		locomotora2.velocidadMaxima(201)
+		assert.equals(150, formacion3.velocidadMaxima())
+	}
+
+	test "la velocidad maxima de la formacion4 es" {
+		var formacion4 = new FormacionCortaDistancia()
+		deposito1.agregarFormacion(formacion4)
+		formacion4.agregarLocomotora(locomotora2)
+		formacion4.agregarLocomotora(locomotora1)
+		locomotora1.velocidadMaxima(80)
+		locomotora2.velocidadMaxima(90)
+		assert.equals(60, formacion4.velocidadMaxima())
+	}
+
+}
+
+/* En el punto 7 se pide saber si el objeto deposito necesita un conductor experimentado
+ * para ello  el deposito delega a el objeto formacion que a su vez delega a los objetos 
+ * locomotora y vagon la comparacion para saber si esta es compleja  
+ */

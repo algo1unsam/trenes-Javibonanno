@@ -1,18 +1,8 @@
-class Vagon {
-
-	var property tipoDeVagon = pasajero
-
-	method pesoMaximo() {
-		return tipoDeVagon.pesoMaximo()
-	}
-
-}
-
-object pasajero {
+class VagonPasajero {
 
 	var property ancho = 0
 	var property largo = 0
-	const property cantidadBanios = 0
+	const property cantidadBanios = 1
 
 	method cantidadDePasajeros() {
 		if (ancho <= 2.5) {
@@ -26,7 +16,7 @@ object pasajero {
 
 }
 
-object carga {
+class VagonCarga {
 
 	var property cargaMaxima = 100
 

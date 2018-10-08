@@ -16,8 +16,14 @@ class Formacion {
 	}
 
 	method velocidadMaxima() {
+		return self.velocidadMaximaLocomotora().min(self.velocidadMaximaLegal())
+	}
+
+	method velocidadMaximaLocomotora() {
 		return locomotoras.min{ unaLocomotora => unaLocomotora.velocidadMaxima() }.velocidadMaxima()
 	}
+
+	method velocidadMaximaLegal()
 
 	method cantidadVagonesLivianos() {
 		return vagones.count({ unVagon => unVagon.pesoMaximo() < 2500 })
@@ -55,24 +61,58 @@ class Formacion {
 		return (locomotoras.size() + vagones.size()) > 20 or (self.sumatoriaDePesoMaximoDeLocomotoras() + self.sumatoriaDePesoMaximoDeVagones()) > 10000
 	}
 
+	method totalDePasajeros() {
+		return vagones.sum{ unVagon => unVagon.cantidadDePasajeros() }
+	}
+
 }
 
-class FormacionesLargaDistancia inherits Formacion {
+class FormacionLargaDistancia inherits Formacion {
+
+	const property origen = null
+	const property destino = null
 
 	method estaBienArmada() {
-		return self.esCompleja() and self.cantidadDeBanios()
+		return self.puedeMoverse() and self.tieneSuficientesBanios()
 	}
 
 	method cantidadDeBanios() {
 		return vagones.sum{ unVagon => unVagon.cantidadBanios() }
 	}
 
+	method tieneSuficientesBanios() {
+		return self.cantidadDeBanios() >= self.totalDePasajeros() / 50
+	}
+
+	override method velocidadMaximaLegal() {
+		return if (origen.esGrande() and destino.esGrande()) 200 else 150
+	}
+
 }
 
-class FormacionesCortaDistancia inherits Formacion {
+class FormacionCortaDistancia inherits Formacion {
 
 	method estaBienArmada() {
 		return self.puedeMoverse() and not self.esCompleja()
+	}
+
+	override method velocidadMaximaLegal() = 60
+
+}
+
+class Ciudad {
+
+	var property esGrande = false
+
+}
+
+class FormacionAltaVelocidad inherits Formacion {
+
+	var property velocidadMaxima = 0
+
+	method estaBienArmada() {
+		return self.velocidadMaxima() > 250 and vagones.all{
+		}
 	}
 
 }
