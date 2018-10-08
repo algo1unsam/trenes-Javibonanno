@@ -108,11 +108,10 @@ class Ciudad {
 
 class FormacionAltaVelocidad inherits Formacion {
 
-	var property velocidadMaxima = 0
+	var property maximaVelocidad = 0
 
 	method estaBienArmada() {
-		return self.velocidadMaxima() > 250 and vagones.all{
-		}
+		return self.maximaVelocidad() > 250 and vagones.all{ unVagon => unVagon.pesoMaximo() < 2500 }
 	}
 
 }
