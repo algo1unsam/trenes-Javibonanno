@@ -111,8 +111,8 @@ class FormacionAltaVelocidad inherits Formacion {
 	var property maximaVelocidad = 0
 
 	method estaBienArmada() {
-		return self.maximaVelocidad() > 250 and vagones.all{ unVagon => unVagon.pesoMaximo() < 2500 }
+		return self.maximaVelocidad() >= 250 and vagones.all{ unVagon => unVagon.pesoMaximo() < 2500 }
 	}
-
+	override method velocidadMaximaLegal() = maximaVelocidad
 }
 

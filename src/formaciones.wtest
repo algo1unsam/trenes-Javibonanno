@@ -148,7 +148,17 @@ describe "test de formaciones" {
 		locomotora2.velocidadMaxima(90)
 		assert.equals(60, formacion4.velocidadMaxima())
 	}
-
+	test "la velocidad maxima de la formacion5 es" {
+		var formacion5 = new FormacionAltaVelocidad(maximaVelocidad=250)
+		deposito1.agregarFormacion(formacion5)
+		formacion5.agregarVagon(vagon3)
+		formacion5.agregarVagon(vagon2)
+		vagon2.ancho(2)
+		vagon2.largo(2)
+		vagon3.ancho(2)
+		vagon3.largo(1)
+		assert.that(formacion5.estaBienArmada())
+	}
 }
 
 /* En el punto 7 se pide saber si el objeto deposito necesita un conductor experimentado
