@@ -149,14 +149,16 @@ describe "test de formaciones" {
 		assert.equals(60, formacion4.velocidadMaxima())
 	}
 	test "la velocidad maxima de la formacion5 es" {
-		var formacion5 = new FormacionAltaVelocidad(maximaVelocidad=250)
+		var formacion5 = new FormacionAltaVelocidad()
 		deposito1.agregarFormacion(formacion5)
 		formacion5.agregarVagon(vagon3)
 		formacion5.agregarVagon(vagon2)
+		formacion5.agregarLocomotora(locomotora1)
 		vagon2.ancho(2)
 		vagon2.largo(2)
 		vagon3.ancho(2)
 		vagon3.largo(1)
+		locomotora1.velocidadMaxima(250)
 		assert.that(formacion5.estaBienArmada())
 	}
 }

@@ -26,8 +26,13 @@ class Formacion {
 	method velocidadMaximaLegal()
 
 	method cantidadVagonesLivianos() {
-		return vagones.count({ unVagon => unVagon.pesoMaximo() < 2500 })
+		return vagones.count({ unVagon => self.esLiviano(unVagon) })
 	}
+
+	method esLiviano(unVagon){
+		return unVagon.pesoMaximo() < 2500 
+	}
+	
 
 	method esEficiente() {
 		return locomotoras.all{ unaLocomotora => unaLocomotora.arrastreUtil() >= unaLocomotora.peso() * 5 }
@@ -106,13 +111,13 @@ class Ciudad {
 
 }
 
-class FormacionAltaVelocidad inherits Formacion {
+class FormacionAltaVelocidad inherits FormacionLargaDistancia {
 
-	var property maximaVelocidad = 0
-
-	method estaBienArmada() {
-		return self.maximaVelocidad() >= 250 and vagones.all{ unVagon => unVagon.pesoMaximo() < 2500 }
+	override method estaBienArmada() {
+		return self.velocidadMaxima() >= 250 and vagones.all{ unVagon =>self.esLiviano(unVagon) }
 	}
-	override method velocidadMaximaLegal() = maximaVelocidad
+
+	override method velocidadMaximaLegal() = 400
+
 }
 
