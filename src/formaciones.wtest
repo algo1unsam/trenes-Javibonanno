@@ -154,6 +154,7 @@ describe "test de formaciones" {
 		formacion5.agregarVagon(vagon3)
 		formacion5.agregarVagon(vagon2)
 		formacion5.agregarLocomotora(locomotora1)
+		locomotora1.capacidadMaximaDeArrastre(5000)
 		vagon2.ancho(2)
 		vagon2.largo(2)
 		vagon3.ancho(2)
