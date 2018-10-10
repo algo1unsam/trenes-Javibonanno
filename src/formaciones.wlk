@@ -107,7 +107,7 @@ class FormacionCortaDistancia inherits Formacion {
 
 class Ciudad {
 
-	var property esGrande = true
+	var property esGrande = false
 
 }
 
